@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "TomCharacter.generated.h"
 
+class UTomInteractionComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -24,6 +25,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+	
+	UPROPERTY(VisibleAnywhere)
+	UTomInteractionComponent* InteractionComp;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> ProjectileClass;
@@ -34,11 +38,11 @@ protected:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void PrimaryAttack();
+	void PrimaryInteract();
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
