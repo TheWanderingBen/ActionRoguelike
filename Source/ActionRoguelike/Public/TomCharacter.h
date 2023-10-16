@@ -29,14 +29,20 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UTomInteractionComponent* InteractionComp;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> ProjectileClass;
+	
+	UPROPERTY(EditAnywhere, Category="Attack")
+	UAnimMontage* AttackAnim;
+	
+	FTimerHandle TimerHandle_PrimaryAttack;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	void PrimaryAttackTimeElapsed() const;
 	void PrimaryAttack();
 	void PrimaryInteract();
 

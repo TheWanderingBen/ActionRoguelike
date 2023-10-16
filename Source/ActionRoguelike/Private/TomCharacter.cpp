@@ -53,13 +53,20 @@ void ATomCharacter::MoveRight(float Value)
 
 void ATomCharacter::PrimaryAttack()
 {
+	PlayAnimMontage(AttackAnim);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATomCharacter::PrimaryAttackTimeElapsed, 0.2f);
+}
+
+void ATomCharacter::PrimaryAttackTimeElapsed() const
+{	
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTransformMatrix = FTransform(GetControlRotation(), HandLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransformMatrix, SpawnParams);
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransformMatrix, SpawnParams);	
 }
 
 void ATomCharacter::PrimaryInteract()
