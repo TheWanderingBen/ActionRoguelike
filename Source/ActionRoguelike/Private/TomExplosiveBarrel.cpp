@@ -3,7 +3,6 @@
 
 #include "TomExplosiveBarrel.h"
 
-#include "GenericPlatform/GenericPlatformCrashContext.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 // Sets default values

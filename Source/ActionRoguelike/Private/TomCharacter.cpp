@@ -58,13 +58,14 @@ void ATomCharacter::PrimaryAttack()
 	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ATomCharacter::PrimaryAttackTimeElapsed, 0.2f);
 }
 
-void ATomCharacter::PrimaryAttackTimeElapsed() const
+void ATomCharacter::PrimaryAttackTimeElapsed()
 {	
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTransformMatrix = FTransform(GetControlRotation(), HandLocation);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
 	
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransformMatrix, SpawnParams);	
 }
