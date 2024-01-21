@@ -5,6 +5,7 @@
 #include "TomInteractionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATomCharacter::ATomCharacter()
@@ -61,7 +62,31 @@ void ATomCharacter::PrimaryAttack()
 void ATomCharacter::PrimaryAttackTimeElapsed()
 {	
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FTransform SpawnTransformMatrix = FTransform(GetControlRotation(), HandLocation);
+	FVector CameraLocation = CameraComp->GetComponentLocation();
+
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Vehicle);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Destructible);
+	FHitResult Hit;
+	FVector End = CameraLocation + (CameraComp->GetComponentRotation().Vector() * 1000);
+	
+	FRotator Rotator;
+	if (GetWorld()->LineTraceSingleByObjectType(Hit, CameraLocation, End, ObjectQueryParams))
+	{
+		// DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Red, false, 2.f, 0, 2.f);
+		Rotator = UKismetMathLibrary::FindLookAtRotation(HandLocation, Hit.Location);
+	}
+	else
+	{
+		Rotator = GetControlRotation();
+	}
+	
+	FTransform SpawnTransformMatrix = FTransform(Rotator, HandLocation);
+	
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
